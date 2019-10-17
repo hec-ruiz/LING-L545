@@ -1,0 +1,51 @@
+Alphabet
+  а ӑ е ё ӗ и о у ӳ ы э ю я б в г д ж з к л м н п р с ҫ т ф х ц ч ш щ й ь ъ
+  А Ӑ Е Ё Ӗ И О У Ӳ Ы Э Ю Я Б В Г Д Ж З К Л М Н П Р С Ҫ Т Ф Х Ц Ч Ш Щ Й Ь Ъ 
+ 
+%{A%}:а %{A%}:е
+%{Ă%}:ӑ %{Ă%}:ӗ %{Ă%}:0
+%{м%}:м %{м%}:0
+
+%{ъ%}
+%>:0 
+
+;
+
+Sets
+
+BackVow = ӑ а ы о у я ё ю %{ъ%};
+
+FrontVow = ӗ э и ӳ е ; 
+
+Cns = б в г д ж з к л м н п р с ҫ т ф х ц ч ш щ й ь ъ ; 
+
+ArchiCns = %{м%} ;
+
+Rules
+
+"Remove morpheme boundary"
+%>:0 <=> _ ;
+
+"Back vowel harmony for archiphoneme {A}"
+%{A%}:а <=> BackVow: [ Cns: | %>: ]+ _ ;
+
+"Back vowel harmony for archiphoneme {Ă}"
+%{Ă%}:ӑ <=> BackVow: [ ArchiCns: | Cns: | %>: ]+ _ ;
+        except
+                                  %{м%}: %>: _ н ;
+			          [а|e ] %>: _ н ; 
+
+"Non surface {Ă} in plural genitive"       ! constraining %{Ă%} to be 0 when following %{м%}
+%{Ă%}:0 <=> %{м%}: %>: _ н ;
+
+"Non surface {Ă} after stem vowels"        ! constraining  %{Ă%} to be 0 when following а or е
+%{Ă%}:0 <=> [а|е]  %>: _ н ;  
+
+"Non surface {м} in plural genitive"      ! constraining %{м%} to be 0 
+%{м%}:0 <=>  с е _  %> %{Ă%}: н ; 
+
+!@  лайк > се{м} > п{A}
+!@  лайк 0 се м  0 п е 
+
+!@  лайк > се{м} > {Ă} н
+!@  лайк 0 се 0  0  0  н

@@ -1,0 +1,70 @@
+Multichar_Symbols
+
+%<n%>                ! Noun
+%<pl%>               ! Plural
+%<nom%>              ! Nominative
+%<ins%>              ! Instrumental
+
+%{A%}                ! Placeholder for phonological process cases (archiphoneme [a] or [e])
+%{Ă%}                ! Genitive archiphoneme
+%{м%}               ! Plural morpheme variation
+
+%<der_лӑх%>        ! Derivative for nouns or adjectives to give abstract meaning
+
+
+%>                   ! Morpheme boundary
+
+%<gen%>              ! Genitive
+
+%{ъ%}               ! to force back harmony for loan words
+
+LEXICON Root
+
+Guesser ;
+Nouns ; 
+
+LEXICON Guesser
+
+🂡%<guess%>:🂡 N ;
+
+LEXICON CASES
+%<nom%>:           #;
+%<ins%>:%>п%{A%}  #;
+%<gen%>:%>%{Ă%}н  #;        ! First option discussed for genitive morpheme
+
+LEXICON PLURAL
+
+                    CASES ;  ! The singular case, input nothing, output nothing, string ends
+%<pl%>:%>се%{м%} CASES ;
+
+LEXICON SUBST
+
+PLURAL ;
+
+LEXICON DER-N
+
+%<der_лӑх%>:%>л%{Ă%}х SUBST "weight: 1.0" ; ! derivational suffix to make new nouns or adjectives with abstract meaning
+
+LEXICON N
+
+%<n%>: SUBST ;
+%<n%>: DER-N ;
+
+LEXICON N/сть
+
+%<n%>:ҫ SUBST "weight: 0.5" ;
+%<n%>%<nom%>:сть # "weight: 1.0" ;
+
+LEXICON Nouns
+
+урам:урам N ;       ! "улица", "street"
+пахча:пахча N ;   ! "сад", "garden"
+хула:хула N ;       ! "город", "city"
+канаш:канаш N ;   ! "совет", "council"
+тӗс:тӗс N ;       ! "вид", "aspect"
+патша:патша N ;   ! "царь", "tsar"
+куҫ:куҫ N ;       ! "глаз", "eye"
+патшалӑх:патшалӑх N ;       ! "государство", "state"
+специалист:специалист%{ъ%} N ; ! "специалист"
+область:обла N/сть; ! last noun of practical
+
