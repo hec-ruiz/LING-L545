@@ -1,0 +1,53 @@
+
+riginal features
+add('i suffix', word[-3:])		# last three letters of word
+add('i pref1', word[0])			# first letter of word
+add('i-1 tag', prev)			# tag of previous word
+add('i-2 tag', prev2)			# tag of twice removed previous word
+add('i tag+i-2 tag', prev, prev2)	# the combination of the previous two tags
+add('i word', context[i])		# the current word
+add('i-1 tag+i word', prev, context[i])	# the combination of the tag of previous word and the current word
+add('i-1 word', context[i-1])		# the previous word
+add('i-1 suffix', context[i-1][-3:])	# last three letters of the previous word
+add('i-2 word', context[i-2])		# twice removed previous word
+add('i+1 word', context[i+1])		# next word
+add('i+1 suffix', context[i+1][-3:])	# last three letters of the next word
+add('i+2 word', context[i+2])		# twice removed next word
+
+# train
+cat ../UD_Portuguese-GSD/pt_gsd-ud-train.conllu | python3 tagger.py -t pt-ud.dat
+
+# run tagger
+cat ../UD_Portuguese-GSD/pt_gsd-ud-test.conllu | python3 tagger.py pt-ud.dat > pt-ud-test.out00
+
+# evaluate
+python3 ../evaluation_script/conll17_ud_eval.py --verbose ../UD_Portuguese-GSD/pt_gsd-ud-test.conllu pt-ud-test.out00
+
+# same but for added features
+cat ../UD_Portuguese-GSD/pt_gsd-ud-train.conllu | python3 tagger2.py -t pt-ud.dat2
+cat ../UD_Portuguese-GSD/pt_gsd-ud-test.conllu | python3 tagger2.py pt-ud.dat2 > pt-ud-test.out20
+python3 ../evaluation_script/conll17_ud_eval.py --verbose ../UD_Portuguese-GSD/pt_gsd-ud-test.conllu pt-ud-test.out20
+
+# new features
+ add('i-1 word+i+1word', context[i-1], context[i+1])
+ add('i+1 word length', str(len(context[i+1])) )
+ add('i-1, word length',str(len(context[i-1])) )
+ add('capitalized', str(word[0].isupper()) )
+
+# results tagger.py
+96.33
+96.36
+96.20
+Avg. = 96.296
+
+# results tagger2.py (all features)
+96.26
+96.26
+96.25
+Avg. = 96.256
+
+# results tagger2.py (1 feature)
+96.44
+96.34
+96.36
+Avg. = 96.38
